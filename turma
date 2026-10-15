@@ -1,0 +1,46 @@
+import { VinculoNaTurma } from "./VinculoNaTurma.js";
+
+export class Turma {
+    #vinculos = [];
+
+    constructor(codigo, componenteCurricular) {
+        if (!codigo || !String(codigo).trim()) {
+            throw new Error("O código da turma é obrigatório.");
+        }
+        if (!componenteCurricular || !String(componenteCurricular).trim()) {
+            throw new Error("O componente curricular é obrigatório.");
+        }
+
+        this.codigo = String(codigo).trim();
+        this.componenteCurricular = String(componenteCurricular).trim();
+    }
+
+    matricular(estudante, dataEntrada = new Date(), frequencia = 100) {
+        const jaMatriculado = this.#vinculos.some(
+            vinculo => vinculo.estudante.matricula === estudante?.matricula
+        );
+
+        if (jaMatriculado) {
+            throw new Error(`O estudante ${estudante.matricula} já está matriculado nesta turma.`);
+        }
+
+        // A própria turma cria e mantém o vínculo (composição).
+        const vinculo = new VinculoNaTurma(estudante, dataEntrada, frequencia);
+        this.#vinculos.push(vinculo);
+        return vinculo.gerarResumo();
+    }
+
+    listarMatriculados() {
+        // Projeção de dados: não expõe os vínculos nem o array interno.
+        return this.#vinculos.map(vinculo => vinculo.gerarResumo());
+    }
+
+    gerarResumo() {
+        return {
+            codigo: this.codigo,
+            componenteCurricular: this.componenteCurricular,
+            quantidadeMatriculados: this.#vinculos.length,
+            matriculados: this.listarMatriculados()
+        };
+    }
+}

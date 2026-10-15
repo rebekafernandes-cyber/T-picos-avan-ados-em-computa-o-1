@@ -1,0 +1,52 @@
+export class Estudante {
+    #notas = [];
+
+    constructor(matricula, nome, curso) {
+        if (matricula === undefined || matricula === null || String(matricula).trim() === "") {
+            throw new Error("A matrícula é obrigatória.");
+        }
+        if (!nome || !String(nome).trim()) {
+            throw new Error("O nome é obrigatório.");
+        }
+        if (!curso || !String(curso).trim()) {
+            throw new Error("O curso é obrigatório.");
+        }
+
+        // A matrícula é estável: não existe setter público para ela.
+        this.matricula = String(matricula).trim();
+        this.nome = String(nome).trim();
+        this.curso = String(curso).trim();
+    }
+
+    adicionarNota(nota) {
+        if (typeof nota !== "number" || !Number.isFinite(nota) || nota < 0 || nota > 10) {
+            throw new Error("A nota deve ser um número entre 0 e 10.");
+        }
+
+        this.#notas.push(nota);
+    }
+
+    calcularMedia() {
+        if (this.#notas.length === 0) {
+            return null;
+        }
+
+        const soma = this.#notas.reduce((total, nota) => total + nota, 0);
+        return Number((soma / this.#notas.length).toFixed(2));
+    }
+
+    listarNotas() {
+        // Retorna uma cópia, nunca o array privado.
+        return [...this.#notas];
+    }
+
+    gerarResumo() {
+        return {
+            matricula: this.matricula,
+            nome: this.nome,
+            curso: this.curso,
+            notas: this.listarNotas(),
+            media: this.calcularMedia()
+        };
+    }
+}

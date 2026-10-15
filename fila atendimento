@@ -1,0 +1,25 @@
+export class FilaAtendimento {
+    #chamados = [];
+
+    adicionar(chamado) {
+        if (!chamado || typeof chamado.gerarResumo !== "function") {
+            throw new Error("Só é possível adicionar chamados válidos à fila.");
+        }
+        this.#chamados.push(chamado);
+    }
+
+    retirarProximo() {
+        if (this.#chamados.length === 0) {
+            return null;
+        }
+        return this.#chamados.shift();
+    }
+
+    consultarTamanho() {
+        return this.#chamados.length;
+    }
+
+    gerarRelatorio() {
+        return this.#chamados.map(chamado => chamado.gerarResumo());
+    }
+}
