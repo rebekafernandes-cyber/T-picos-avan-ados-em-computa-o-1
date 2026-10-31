@@ -1,12 +1,15 @@
 {
-  "name": "suporte-academico-oo",
+  "name": "cadastro-academico-typescript",
   "version": "1.0.0",
-  "description": "Sistema de suporte acadêmico orientado a objetos em JavaScript (Node.js/ESM).",
+  "private": true,
   "type": "module",
   "scripts": {
-    "start": "node src/app.js"
+    "build": "tsc",
+    "check": "tsc --noEmit",
+    "start": "node dist/app.js"
   },
-  "engines": {
-    "node": ">=18"
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "typescript": "^5.0.0"
   }
 }
